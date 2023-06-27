@@ -1,0 +1,10 @@
+Flask
+SQLAlchemy
+Flask-SQLAlchemy
+asyncpg
+aiohttp
+Gino
+Werkzeug
+pydantic
+python-dotenv
+isort
