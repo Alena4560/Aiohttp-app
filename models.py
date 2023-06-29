@@ -34,6 +34,7 @@ class User(Base):
     advertisements = relationship('Advertisement', backref='user', lazy='dynamic')
 
     def __init__(self, name, email, password):
+        super().__init__()
         self.name = name
         self.email = email
         self.password_hash = generate_password_hash(password)
@@ -53,6 +54,7 @@ class Advertisement(Base):
     user_id = Column(Integer, ForeignKey('app_users.id'))
 
     def __init__(self, title, description, owner, user_id):
+        super().__init__()
         self.title = title
         self.description = description
         self.owner = owner
