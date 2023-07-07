@@ -1,10 +1,9 @@
 SQLAlchemy
-psycopg2
 asyncpg
 aiohttp
-Gino
 Werkzeug
-pydantic
+pydantic==1.*
 pydantic[email]
 python-dotenv
 isort
+
