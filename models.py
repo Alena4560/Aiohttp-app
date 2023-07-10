@@ -1,13 +1,11 @@
 import os
-# from atexit import register
 from datetime import datetime
-# from cachetools import cached
 
 from dotenv import load_dotenv
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, func, create_engine
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, func
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 
-from sqlalchemy.orm import relationship, sessionmaker, declarative_base
+from sqlalchemy.orm import relationship, declarative_base
 from werkzeug.security import check_password_hash, generate_password_hash
 
 load_dotenv('.env')
@@ -19,9 +17,8 @@ PG_PORT = os.getenv('PG_PORT')
 PG_DSN = f'postgresql+asyncpg://{PG_USER}:{PG_PASSWORD}@{PG_HOST}:{PG_PORT}/{PG_DB}'
 
 engine = create_async_engine(PG_DSN)
-# register(engine.dispose)
 Base = declarative_base()
-Session = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
+Session = async_sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
 
 
 class User(Base):
