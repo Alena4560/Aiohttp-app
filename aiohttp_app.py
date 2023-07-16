@@ -17,7 +17,6 @@ async def app_context(app: web.Application):
 @web.middleware
 async def session_middleware(request: web.Request, handler):
     async with Session() as session:
-        print(request)
         request['session'] = session
         response = await handler(request)
         return response
@@ -32,13 +31,6 @@ class AdvertisementView(web.View):
     @property
     def advertisement_id(self) -> int:
         return int(self.request.match_info['advertisement_id'])
-
-    async def get_all(self):
-        try:
-            advertisements = await self.session.get(Advertisement.query.all())
-            return web.json_response([adv.to_dict() for adv in advertisements])
-        except Exception as e:
-            return web.json_response({'error': str(e)}, status=500)
 
     async def get(self):
         advertisement = await self.session.get(Advertisement, self.advertisement_id)
@@ -164,8 +156,7 @@ async def create_app():
     app.cleanup_ctx.append(app_context)
     app.middlewares.append(session_middleware)
 
-    app.router.add_get('/advertisements', AdvertisementView.get_all)
-    app.router.add_get('/advertisements/{advertisement_id}', AdvertisementView.get)
+    app.router.add_route('GET', '/advertisements/{advertisement_id}', AdvertisementView)
     app.router.add_route('POST', '/advertisements', AdvertisementView)
     app.router.add_route('PATCH', '/advertisements/{advertisement_id}', AdvertisementView)
     app.router.add_route('DELETE', '/advertisements/{advertisement_id}', AdvertisementView)
